@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>By Moinuddin VS Tasleem</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  background:radial-gradient(circle at top,#3c096c,#240046,#10002b);
+  font-family:Segoe UI,sans-serif;
+  cursor:pointer;
+  color:#fff;
+}
+
+/* container */
+.container{
+  height:100svh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+
+/* 🌙 glowing moon */
+svg{
+  width:min(90vw,420px);
+  animation:moonGlow 6s ease-in-out infinite;
+}
+@keyframes moonGlow{
+  0%,100%{
+    filter:drop-shadow(0 0 26px rgba(224,170,255,.6))
+           drop-shadow(0 0 60px rgba(224,170,255,.45));
+  }
+  50%{
+    filter:drop-shadow(0 0 42px rgba(224,170,255,.9))
+           drop-shadow(0 0 100px rgba(224,170,255,.7));
+  }
+}
+
+/* ⭐ stars */
+.star{fill:#fff;animation:twinkle 2.5s infinite alternate}
+@keyframes twinkle{from{opacity:.3}to{opacity:1}}
+
+/* 🌸❤️🌕 petals */
+.petals{position:fixed;inset:0;pointer-events:none;z-index:1}
+.petal{
+  position:absolute;
+  top:-40px;
+  font-size:18px;
+  opacity:.85;
+  animation:fall linear infinite;
+}
+.petal.heart{
+  filter:drop-shadow(0 0 10px #ff5fa2)
+         drop-shadow(0 0 20px rgba(255,95,162,.9));
+}
+@keyframes fall{
+  from{transform:translateY(0) rotate(0deg)}
+  to{transform:translateY(110vh) rotate(180deg)}
+}
+
+/* 💬 sentence popup */
+.love-text{
+  position:fixed;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:bold;
+  animation:pop 1.8s forwards;
+  pointer-events:none;
+  z-index:10;
+  text-shadow:0 0 14px rgba(255,255,255,.9);
+}
+@keyframes pop{
+  0%{opacity:0;transform:scale(.4)}
+  20%{opacity:1;transform:scale(1.2)}
+  100%{opacity:0;transform:scale(1.6) translateY(-40px)}
+}
+
+/* ❤️⭐ icon pops */
+.icon-pop{
+  position:fixed;
+  font-size:22px;
+  animation:iconPop 1.2s forwards;
+  pointer-events:none;
+  z-index:11;
+}
+@keyframes iconPop{
+  0%{opacity:0;transform:scale(.4)}
+  20%{opacity:1;transform:scale(1.2)}
+  100%{opacity:0;transform:scale(1.6) translateY(-30px)}
+}
+
+/* 🎆 fireworks */
+.firework{
+  position:fixed;
+  font-size:18px;
+  animation:boom 1s forwards;
+  pointer-events:none;
+  z-index:9;
+}
+@keyframes boom{
+  to{transform:translate(var(--x),var(--y)) scale(2);opacity:0}
+}
+
+/* 🌠 shooting stars (FULL SCREEN R ➜ L) */
+.shoot{
+  position:fixed;
+  width:220px;
+  height:2px;
+  background:linear-gradient(270deg,#fff,transparent);
+  opacity:.95;
+  animation:shoot 1.4s linear forwards;
+  z-index:8;
+}
+
+/* ⭐ golden stars */
+.shoot.gold{
+  background:linear-gradient(270deg,#ffd700,transparent);
+  box-shadow:0 0 14px #ffd700, 0 0 28px rgba(255,215,0,.9);
+}
+
+@keyframes shoot{
+  from{transform:translate(0,0)}
+  to{transform:translate(-120vw,80vh);opacity:0}
+}
+</style>
+</head>
+
+<body onclick="love(event)">
+
+<div class="petals" id="petals"></div>
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<div class="container">
+<svg viewBox="0 0 400 400">
+  <!-- 🌙 moon -->
+  <circle cx="220" cy="200" r="120" fill="#e0aaff"/>
+  <circle cx="260" cy="180" r="120" fill="#10002b"/>
+
+  <!-- ⭐ stars -->
+  <g class="star">
+    <circle cx="40" cy="60" r="2"/>
+    <circle cx="80" cy="40" r="2.5"/>
+    <circle cx="120" cy="90" r="2"/>
+    <circle cx="160" cy="40" r="3"/>
+    <circle cx="200" cy="70" r="2.5"/>
+    <circle cx="260" cy="40" r="2"/>
+    <circle cx="300" cy="80" r="3"/>
+    <circle cx="340" cy="60" r="2.5"/>
+    <circle cx="360" cy="120" r="2"/>
+    <circle cx="50" cy="200" r="2.5"/>
+    <circle cx="90" cy="260" r="2"/>
+    <circle cx="140" cy="300" r="3"/>
+    <circle cx="200" cy="330" r="2.5"/>
+    <circle cx="260" cy="300" r="2"/>
+    <circle cx="320" cy="260" r="3"/>
+    <circle cx="360" cy="220" r="2.5"/>
+  </g>
+</svg>
+</div>
+
+<script>
+/* 🌸❤️🌕 petals */
+const petalIcons=["🌸","❤️","🌕"];
+setInterval(()=>{
+  const p=document.createElement("div");
+  p.className="petal";
+  const icon=petalIcons[Math.floor(Math.random()*petalIcons.length)];
+  p.innerHTML=icon;
+  if(icon==="❤️") p.classList.add("heart");
+  p.style.left=Math.random()*100+"vw";
+  p.style.fontSize=(16+Math.random()*14)+"px";
+  p.style.animationDuration=(12+Math.random()*10)+"s";
+  petals.appendChild(p);
+  setTimeout(()=>p.remove(),20000);
+},420);
+
+/* 💞 messages */
+const messages=[
+"I ❤️ You Tasleem","You are my everything","My heart belongs to you","You are my forever",
+"Love written for us","You light my world","I choose you always","My wish is you",
+"You are my safe place","Endless love",
+"You complete me","Life is beautiful with you","You are my moonlight","My soul smiles for you",
+"Forever feels right","You are my miracle","I fall for you daily","You are my calm",
+"Love feels easy","You are my destiny",
+"My heart beats for you","My favorite feeling","Always you","You light my night",
+"I’m grateful for you","Dream come true","My home is you","You are my sunshine",
+"My forever starts here","You are my happiness",
+"I adore you","You are my heartbeat","Love looks like you","You are my star",
+"My world begins with you","You are my comfort","I trust you","You are my magic",
+"Every moment matters","You are my blessing",
+"You are my always","Lucky to love you","You are my peace","I cherish you",
+"You are the one","Love is easy with you","You inspire me","I believe in us",
+"My forever wish","My heart chose you",
+"You are my gift","You make me smile","My moon and stars","Beyond words",
+"Today and tomorrow","My heart feels safe","You are my reason","I’m yours",
+"True love","Forever grateful",
+"You are my universe","Love feels right","Everything to me","I promise my heart",
+"Endless love","Always us","Perfect story","My heart knows you",
+"My destiny","I love you forever"
+];
+
+let idx=0;
+const colors=["#ffd6ff","#e0aaff","#c77dff","#ff9ecf","#fff"];
+let musicStarted=false;
+
+function love(e){
+  if(!musicStarted){ music.play(); musicStarted=true; }
+
+  /* sentence */
+  const t=document.createElement("div");
+  t.className="love-text";
+  t.innerText=messages[idx];
+  t.style.color=colors[Math.floor(Math.random()*colors.length)];
+  t.style.left=e.clientX+"px";
+  t.style.top=e.clientY+"px";
+  document.body.appendChild(t);
+  idx=(idx+1)%messages.length;
+  setTimeout(()=>t.remove(),1800);
+
+  /* ❤️⭐ pop icons */
+  ["❤️","⭐"].forEach((icon,i)=>{
+    const el=document.createElement("div");
+    el.className="icon-pop";
+    el.innerText=icon;
+    el.style.left=(e.clientX+(i?20:-20))+"px";
+    el.style.top=(e.clientY+20)+"px";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1200);
+  });
+
+  /* 🎆 fireworks */
+  for(let i=0;i<8;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.innerHTML="❤️";
+    f.style.left=e.clientX+"px";
+    f.style.top=e.clientY+"px";
+    f.style.setProperty("--x",(Math.random()*200-100)+"px");
+    f.style.setProperty("--y",(Math.random()*200-100)+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }
+
+  /* 🌠 FULL-SCREEN shooting stars */
+  const count=3+Math.floor(Math.random()*3);
+  for(let i=0;i<count;i++){
+    const s=document.createElement("div");
+    s.className="shoot";
+    if(Math.random()<0.25) s.classList.add("gold");
+    s.style.left=(window.innerWidth + Math.random()*200)+"px";
+    s.style.top=Math.random()*window.innerHeight+"px";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1500);
+  }
+}
+</script>
+
+</body>
+</html>
